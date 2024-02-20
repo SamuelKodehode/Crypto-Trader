@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Samuel">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML, CSS, Typescript">
+</head>
+<body>
+<div id="chart">
+    <div id="showcase-coin">
+        <h1 id="show-name"></h1>
+        <h2 id="show-logo"></h2>
+        <h3 id="show-price"></h3>
+        <h3 id="show-percent"></h3>
+    </div>
+    <div id="user-assets">
+        <h3 id="user-name"></h3>
+        <h3 id="user-money-usd"></h3>
+        <h3 id="user-coin-value"></h3>
+        <div id="user-coins">
+
+        </div>
+
+    </div>
+
+    <div id="select-div">
+        <label for="currency"></label>
+        <select  name="currency" id="currency"></select>
+
+        <label for="time-frame"></label>
+        <select name="timeFrame" id="time-frame">
+            <option value="m1">m1</option>
+            <option value="m5">m5</option>
+            <option value="m15">m15</option>
+            <option value="m30">m30</option>
+            <option value="h1">h1</option>
+            <option value="h2">h2</option>
+            <option value="h6">h6</option>
+            <option value="h12">h12</option>
+            <option value="d1">d1<option>
+        </select>
+    </div>
+    <div id="canvas-div">
+        <canvas id="canvas"></canvas>
+    </div>
+    <div id="price-div">
+    </div>
+    <div id="time-div">
+
+    </div>
+</div>
+<div id="sort-div">
+    <select name="sort" id="sort">
+        <option value="std">standard</option>
+        <option value="priceH">price: high</option>
+        <option value="priceL">price: low</option>
+        <option value="24H">best24h</option>
+        <option value="24L">worst24h</option>
+    </select>
+</div>
+<div id="list"></div>
+
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>

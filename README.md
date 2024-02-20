@@ -1,18 +1,90 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/mNBfRTjo)
-# API Assignment
 
-We have learned about asynchronous Javascript, and specifically about using promises and async/await to handle asynchronous Javascript. In this assignment you will practice these skills by making a website that uses an API that you can fetch data from. You have the freedom to use any free API you want (click [here](https://github.com/public-apis/public-apis?tab=readme-ov-file) for a comprehensive list).
 
-But I will require some complexity, such as:
+# TypeScript Project Template Readme
 
-- An API that has several different endpoints that you use in your project
-- An API with an endpoint that accepts parameters in the url
-- API data that you have to loop over to generate content
+## Overview
 
-Your project should satisfy at least 2 of those. A favorite among earlier students at Kodehode has been to use [this API](https://pokeapi.co/) to make a website.
+This TypeScript project template is designed to kickstart your TypeScript development with proper configuration for the TypeScript Compiler (`tsc`) and Prettier. Below, you'll find a brief explanation of the key configuration files and their purpose.
 
-This assignment is a perfect opportunity to create something that will look good on your portfolio, so I highly recommend that you style your project up a bit to look nice.
+## Files
 
-Most public APIs have nice documentation that show you how to use it, the various endpoints and what parameters they accept. Use the documentation 🤓
+### `tsconfig.json`
 
-PS: Do **not** use any API that requires you to use a key. (We haven't covered how to hide your API keys safely yet.)
+The `tsconfig.json` file contains the configuration settings for the TypeScript Compiler (`tsc`). Here's a breakdown of the key options:
+
+- **target:** Specifies the ECMAScript target version (ESNext in this case).
+- **lib:** Defines the libraries to include during compilation (ESNext and DOM).
+- **outDir:** Specifies the output directory for compiled files.
+- **rootDir:** Indicates the root directory of TypeScript source files.
+- **strict:** Enables strict type-checking options.
+- **esModuleInterop:** Allows default imports from CommonJS modules.
+- **module:** Specifies the module system (ESNext in this case).
+- **removeComments:** Removes comments from the generated output.
+- **sourceMap:** Generates source map files for better debugging.
+
+### `.prettierrc`
+
+The `.prettierrc` file configures Prettier, a code formatter for maintaining consistent code style. Here's an overview of the configuration options:
+
+- **arrowParens:** Enforces parentheses around a sole arrow function parameter.
+- **bracketSameLine:** Ensures multiline object literals have the opening bracket on the same line.
+- **bracketSpacing:** Adds spaces between brackets in object literals.
+- **endOfLine:** Defines the line ending style (LF).
+- **jsxSingleQuote:** Uses single quotes for JSX attributes.
+- **printWidth:** Specifies the maximum line length before wrapping.
+- **semi:** Omits semicolons at the end of statements.
+- **useTabs:** Indents with tabs instead of spaces.
+- **trailingComma:** Controls trailing commas in object literals and arrays.
+- **tabWidth:** Sets the number of spaces per tab.
+- **singleQuote:** Uses single quotes instead of double quotes for strings.
+- **htmlWhitespaceSensitivity:** Defines sensitivity to HTML whitespace (strict).
+
+## Installation
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/your-username/your-project.git
+   ```
+
+2. **Navigate to Project Directory:**
+   ```bash
+   cd your-project
+   ```
+
+3. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+4. **Install Prettier:**
+   ```bash
+   npm install --save-dev prettier
+   ```
+
+## Usage
+
+1. **Run TypeScript Compiler (tsc):**
+    - To compile TypeScript files, run:
+      ```bash
+      npx tsc
+      ```
+
+2. **Watch Mode:**
+    - To run TypeScript Compiler in watch mode, use:
+      ```bash
+      npx tsc --watch
+      ```
+
+3. **Format Code with Prettier:**
+    - To format your code using Prettier, run:
+      ```bash
+      npm run format
+      ```
+
+## Additional Notes
+
+- Customize the `tsconfig.json` and `.prettierrc` files based on your project requirements.
+- Refer to the official [TypeScript Compiler Options documentation](https://www.typescriptlang.org/tsconfig) and [Prettier Configuration documentation](https://prettier.io/docs/en/configuration.html) for more details.
+
+Now your TypeScript project is ready for development with proper TypeScript and Prettier configurations. Happy coding!
+```
