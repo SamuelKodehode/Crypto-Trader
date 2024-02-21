@@ -2,7 +2,6 @@ import { cleanPrice } from './cleanPrice.js'
 import { getRandomColor } from './randomColor.js'
 import { User } from './user.js'
 
-const chartDiv = document.getElementById('chart') as HTMLDivElement
 const selectChart = document.getElementById('currency') as HTMLSelectElement
 const canvasDiv = document.getElementById('canvas-div') as HTMLDivElement
 const priceDiv = document.getElementById('price-div') as HTMLDivElement
@@ -132,11 +131,11 @@ const userCoins = document.getElementById('user-coins') as HTMLDivElement
 let listArray: Object[] = []
 let chartArray: any = []
 
-const headers = new Headers({
+const headers: Headers = new Headers({
 	'Accept-Encoding': 'gzip'
 })
 
-const chartHeaders = new Headers({
+const chartHeaders: Headers = new Headers({
 	'Accept-Encoding': 'deflate'
 })
 
@@ -180,6 +179,7 @@ async function getChart(targetArray: any, id: string, time: string) {
 
 function renderList(data: any) {
 	listDiv.innerHTML = ''
+
 	let ArDat = [...data.data]
 
 	if (sorting.value === 'priceH') {
@@ -208,10 +208,10 @@ function renderList(data: any) {
 		const inputBuyAmountDollar = document.createElement('input') as HTMLInputElement
 
 		inputBuyAmountDollar.type = 'number'
+		inputBuyAmountDollar.placeholder = 'amount USD'
 		option.textContent = coin.name
 		option.value = coin.id
 		selectChart.append(option)
-
 		// logic
 		const priceChangeNum = parseFloat(cleanPrice(coin.changePercent24Hr, 2))
 
@@ -232,6 +232,7 @@ function renderList(data: any) {
 		} else {
 			priceChange.textContent = `${cleanPrice(coin.changePercent24Hr, 2)}%`
 		}
+
 		name.textContent = coin.name
 		symbol.textContent = coin.symbol
 		priceUsd.textContent = `USD ${cleanPrice(coin.priceUsd, 3)}`
@@ -251,7 +252,7 @@ function renderList(data: any) {
 
 		buyButton.addEventListener('click', () => {
 			buy(inputBuyAmountDollar.valueAsNumber, parseFloat(coin.priceUsd), coin.id)
-			inputBuyAmountDollar.valueAsNumber = 0
+			inputBuyAmountDollar.value = ''
 			localStorage.setItem('user', JSON.stringify(user))
 		})
 		if (coin.id === selectChart.value) {
@@ -287,6 +288,7 @@ function renderList(data: any) {
 selectChart.addEventListener('input', () => {
 	getData(assetsUrl).then()
 })
+
 const drawchart = (array: any) => {
 	canvasDiv.innerHTML = ''
 	priceDiv.innerHTML = ''
@@ -334,7 +336,7 @@ const drawchart = (array: any) => {
 	context.lineTo(startPoint, startValue)
 
 	const grd = context.createLinearGradient(0, 0, canvas.width / 2, 0)
-	grd.addColorStop(0, 'rgba(114,0,255,0.75)')
+	grd.addColorStop(0, 'rgb(191,0,255)')
 	grd.addColorStop(1, 'rgba(0,182,255,0.65)')
 
 	// Fill with gradient
@@ -387,14 +389,10 @@ const drawchart = (array: any) => {
 	selectTime.addEventListener('change', () => {
 		getChart(chartArray, selectChart.value, selectTime.value).then()
 	})
-
 	canvasDiv.append(canvas)
 }
 sorting.addEventListener('change', async () => {
-	console.log('hei')
 	await getData(assetsUrl).then()
-	console.log(listArray)
-	console.log(sorting.value)
 })
 
 function buy(amount: number, coinRate: number, coinId: string) {
@@ -404,6 +402,7 @@ function buy(amount: number, coinRate: number, coinId: string) {
 		if (amount <= user.money) {
 			user.money -= amount
 			coinToUpdate.amount += amount / coinRate
+
 			console.log(`Bought ${amount} of ${coinId} at rate ${coinRate}`)
 		} else {
 			console.log(`Insufficient funds to buy ${amount} of ${coinId}`)
@@ -424,6 +423,7 @@ async function updateUser() {
 
 	const marketData = await fetchMarketData()
 	user.coins.forEach((coin) => {
+
 		if (coin.amount > 0) {
 			// Find the market data for the current coin
 			const coinMarketData = marketData.find((data: any) => data.id === coin.id)
@@ -437,18 +437,20 @@ async function updateUser() {
 				const coinDiv = document.createElement('div') as HTMLDivElement
 				coinDiv.textContent = `${coin.id}: ${cleanPrice(coin.amount.toString(), 3)} coins | Value: ${parseFloat(coinValue.toFixed(2))} USD`
 
-
 				const sellInput = document.createElement('input') as HTMLInputElement
 				const sellBtn = document.createElement('button') as HTMLButtonElement
 
 				sellInput.type = 'number'
+				sellInput.placeholder = ' coin amount'
 				sellBtn.textContent = 'sell'
 
 				sellBtn.addEventListener('click', () => {
-					coin.amount -= sellInput.valueAsNumber
-					user.money += sellInput.valueAsNumber * coinMarketValue
-					updateUser()
-					sellInput.textContent = ''
+					if (sellInput.valueAsNumber > 0 && sellInput.valueAsNumber * coinMarketValue <= user.money) {
+						coin.amount -= sellInput.valueAsNumber
+						user.money += sellInput.valueAsNumber * coinMarketValue
+						updateUser()
+						sellInput.textContent = ''
+					}
 				})
 
 				userCoins.append(coinDiv, sellInput, sellBtn)
@@ -457,10 +459,6 @@ async function updateUser() {
 			} else {
 				console.log(`Market data not found for ${coin.id}`)
 			}
-
-
-
-
 
 		}
 	})
@@ -471,10 +469,12 @@ async function updateUser() {
 
 async function fetchMarketData() {
 	const marketDataURL = 'https://api.coincap.io/v2/assets'
+
 	try {
 		const result: Response = await fetch(marketDataURL, { method: 'GET', headers: headers })
 		const marketData = await result.json()
 		return marketData.data
+
 	} catch (error) {
 		console.log('Error fetching market data:', error)
 		return []
@@ -482,5 +482,5 @@ async function fetchMarketData() {
 }
 
 getData(assetsUrl).then()
-getChart(chartArray, 'bitcoin', 'h12').then()
+getChart(chartArray, 'bitcoin', 'm5').then()
 updateUser().then()

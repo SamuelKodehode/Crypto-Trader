@@ -1,6 +1,5 @@
 import { cleanPrice } from './cleanPrice.js';
 import { getRandomColor } from './randomColor.js';
-const chartDiv = document.getElementById('chart');
 const selectChart = document.getElementById('currency');
 const canvasDiv = document.getElementById('canvas-div');
 const priceDiv = document.getElementById('price-div');
@@ -199,6 +198,7 @@ function renderList(data) {
         const buyButton = document.createElement('button');
         const inputBuyAmountDollar = document.createElement('input');
         inputBuyAmountDollar.type = 'number';
+        inputBuyAmountDollar.placeholder = 'amount USD';
         option.textContent = coin.name;
         option.value = coin.id;
         selectChart.append(option);
@@ -234,7 +234,7 @@ function renderList(data) {
         listDiv.append(coinDiv);
         buyButton.addEventListener('click', () => {
             buy(inputBuyAmountDollar.valueAsNumber, parseFloat(coin.priceUsd), coin.id);
-            inputBuyAmountDollar.valueAsNumber = 0;
+            inputBuyAmountDollar.value = '';
             localStorage.setItem('user', JSON.stringify(user));
         });
         if (coin.id === selectChart.value) {
@@ -303,7 +303,7 @@ const drawchart = (array) => {
     context.lineTo(startPoint, canvas.height);
     context.lineTo(startPoint, startValue);
     const grd = context.createLinearGradient(0, 0, canvas.width / 2, 0);
-    grd.addColorStop(0, 'rgba(114,0,255,0.75)');
+    grd.addColorStop(0, 'rgb(191,0,255)');
     grd.addColorStop(1, 'rgba(0,182,255,0.65)');
     context.fillStyle = grd;
     context.fill();
@@ -344,10 +344,7 @@ const drawchart = (array) => {
     canvasDiv.append(canvas);
 };
 sorting.addEventListener('change', async () => {
-    console.log('hei');
     await getData(assetsUrl).then();
-    console.log(listArray);
-    console.log(sorting.value);
 });
 function buy(amount, coinRate, coinId) {
     const coinToUpdate = user.coins.find((coin) => coin.id === coinId);
@@ -384,12 +381,15 @@ async function updateUser() {
                 const sellInput = document.createElement('input');
                 const sellBtn = document.createElement('button');
                 sellInput.type = 'number';
+                sellInput.placeholder = ' coin amount';
                 sellBtn.textContent = 'sell';
                 sellBtn.addEventListener('click', () => {
-                    coin.amount -= sellInput.valueAsNumber;
-                    user.money += sellInput.valueAsNumber * coinMarketValue;
-                    updateUser();
-                    sellInput.textContent = '';
+                    if (sellInput.valueAsNumber > 0 && sellInput.valueAsNumber * coinMarketValue <= user.money) {
+                        coin.amount -= sellInput.valueAsNumber;
+                        user.money += sellInput.valueAsNumber * coinMarketValue;
+                        updateUser();
+                        sellInput.textContent = '';
+                    }
                 });
                 userCoins.append(coinDiv, sellInput, sellBtn);
                 console.log(`Coin: ${coin.id}, Amount: ${coin.amount.toFixed(2)}, Value: ${coinValue}`);
@@ -414,6 +414,6 @@ async function fetchMarketData() {
     }
 }
 getData(assetsUrl).then();
-getChart(chartArray, 'bitcoin', 'h12').then();
+getChart(chartArray, 'bitcoin', 'm5').then();
 updateUser().then();
 //# sourceMappingURL=script.js.map
