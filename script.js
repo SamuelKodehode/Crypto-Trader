@@ -150,6 +150,22 @@ async function getChart(targetArray, id, time) {
         const result = await fetch(priceChartChange, { method: 'GET', headers: chartHeaders });
         targetArray = await result.json();
         console.log(targetArray.data);
+        if (time === 'm1')
+            targetArray.data = targetArray.data.slice(-60);
+        if (time === 'm5')
+            targetArray.data = targetArray.data.slice(-288);
+        if (time === 'm15')
+            targetArray.data = targetArray.data.slice(-288);
+        if (time === 'm30')
+            targetArray.data = targetArray.data.slice(-336);
+        if (time === 'h1')
+            targetArray.data = targetArray.data.slice(-336);
+        if (time === 'h2')
+            targetArray.data = targetArray.data.slice(-336);
+        if (time === 'h6')
+            targetArray.data = targetArray.data.slice(-728);
+        if (time === 'h12')
+            targetArray.data = targetArray.data.slice(-728);
         drawchart(targetArray);
     }
     catch (error) {
@@ -249,7 +265,7 @@ function renderList(data) {
     });
 }
 selectChart.addEventListener('input', () => {
-    getData(assetsUrl);
+    getData(assetsUrl).then();
 });
 const drawchart = (array) => {
     canvasDiv.innerHTML = '';
@@ -352,7 +368,7 @@ function buy(amount, coinRate, coinId) {
 }
 async function updateUser() {
     userName.textContent = 'Name: ' + user.name;
-    userMoney.textContent = 'USD: ' + user.money.toString();
+    userMoney.textContent = 'USD: ' + user.money.toFixed(2).toString();
     let totalPortfolioValue = 0;
     userCoins.innerHTML = '';
     const marketData = await fetchMarketData();
@@ -365,7 +381,17 @@ async function updateUser() {
                 totalPortfolioValue += coinValue;
                 const coinDiv = document.createElement('div');
                 coinDiv.textContent = `${coin.id}: ${cleanPrice(coin.amount.toString(), 3)} coins | Value: ${parseFloat(coinValue.toFixed(2))} USD`;
-                userCoins.appendChild(coinDiv);
+                const sellInput = document.createElement('input');
+                const sellBtn = document.createElement('button');
+                sellInput.type = 'number';
+                sellBtn.textContent = 'sell';
+                sellBtn.addEventListener('click', () => {
+                    coin.amount -= sellInput.valueAsNumber;
+                    user.money += sellInput.valueAsNumber * coinMarketValue;
+                    updateUser();
+                    sellInput.textContent = '';
+                });
+                userCoins.append(coinDiv, sellInput, sellBtn);
                 console.log(`Coin: ${coin.id}, Amount: ${coin.amount.toFixed(2)}, Value: ${coinValue}`);
             }
             else {
@@ -388,6 +414,6 @@ async function fetchMarketData() {
     }
 }
 getData(assetsUrl).then();
-getChart(chartArray, 'bitcoin', 'd1').then();
+getChart(chartArray, 'bitcoin', 'h12').then();
 updateUser().then();
 //# sourceMappingURL=script.js.map
