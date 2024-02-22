@@ -7,6 +7,9 @@ const timeDiv = document.getElementById('time-div');
 const selectTime = document.getElementById('time-frame');
 const sorting = document.getElementById('sort');
 const listDiv = document.getElementById('list');
+const portBtn = document.getElementById('portBtn');
+const userAssets = document.getElementById('user-assets');
+let userAssetsShow = false;
 let user = {
     name: 'Samuel',
     money: 1000,
@@ -279,7 +282,10 @@ const drawchart = (array) => {
         console.error('Unable to get 2D context for canvas.');
     }
     canvas.width = window.innerWidth * 0.7;
-    canvas.height = window.innerHeight * 0.7;
+    canvas.height = window.innerWidth * 0.3;
+    window.addEventListener('resize', () => {
+        getChart(chartArray, selectChart.value, selectTime.value);
+    });
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.clearRect(0, 0, innerWidth, innerHeight);
@@ -317,12 +323,14 @@ const drawchart = (array) => {
         showPrice.style.color = 'rgb(111,111,111)';
         showPrice.style.bottom = `${(100 / 20) * i}%`;
         showPrice.style.left = `-9%`;
+        showPrice.id = 'prices';
         priceDiv.append(showPrice);
     }
     for (let i = 0; i < data.length; i += Math.floor(data.length / 15)) {
         const index = Math.floor(i);
         if (index < data.length) {
             const time = document.createElement('h2');
+            time.id = 'time';
             const dateObject = new Date(data[index].time);
             time.textContent = `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString([], {
                 hour: '2-digit',
@@ -413,6 +421,12 @@ async function fetchMarketData() {
         return [];
     }
 }
+userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visibility = 'hidden';
+portBtn.addEventListener('click', () => {
+    userAssetsShow = !userAssetsShow;
+    userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visibility = 'hidden';
+    userAssetsShow ? portBtn.style.backgroundImage = 'linear-gradient(-45deg, rgb(243, 0, 255), rgb(0, 167, 255))' : portBtn.style.backgroundImage = 'linear-gradient(23deg, rgb(243, 0, 255), rgb(0, 167, 255))';
+});
 getData(assetsUrl).then();
 getChart(chartArray, 'bitcoin', 'm5').then();
 updateUser().then();

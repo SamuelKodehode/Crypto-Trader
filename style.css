@@ -35,7 +35,6 @@ body {
 }
 
 #chart{
-
     position: relative;
     display: flex;
     align-items: center;
@@ -54,13 +53,13 @@ body {
 }
 
 #select-div{
+    display: flex;
     position: absolute;
-    top: -15%;
-    left: 4%;
-
+    top: 3%;
+    left: 35%;
 }
 
-#time-frame, #currency, #sort {
+#time-frame, #currency, #sort, #portBtn {
     background-color: #3c3c3c;
     background-image: linear-gradient(23deg, rgb(243, 0, 255), rgb(0, 167, 255));
     color: white;
@@ -69,6 +68,12 @@ body {
     border: none;
     padding: 5px;
 }
+
+#time-frame:active, #currency:active, #sort:active, #portBtn:active{
+    transition: 0.2s;
+    background-image: linear-gradient(-45deg, rgb(243, 0, 255), rgb(0, 167, 255));
+}
+
 #time-div {
     position: absolute;
     width: 100%;
@@ -78,6 +83,7 @@ body {
     bottom: -8%;
     flex-direction: row;
     gap: 1%;
+
 }
 
 #showcase-coin {
@@ -152,5 +158,93 @@ input:hover, button:hover {
  canvas {
      border: 1px solid rgba(128, 128, 128, 0.26);
      padding: 4px;
+     image-rendering: high-quality;
  }
+
+
+@media (max-height: 680px), screen and (orientation: portrait) {
+    #time {
+        display: none;
+    }
+
+    #prices {
+        display: none;
+    }
+
+    #user-assets {
+        margin-top: 0;
+        width: 100vw;
+        padding: 60px;
+        background-color: #11181e;
+        position: page;
+        top: 0;
+        left: 0;
+        opacity: 1;
+        z-index: 99;
+        padding-top: 0;
+    }
+
+    #coinDiv {
+        margin-left: 0;
+        padding-left: 0;
+        text-align: left;
+    }
+
+
+    #chart{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+        width: 100vw;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    #time-frame, #currency, #sort, #portBtn {
+        top: 0;
+        padding: 1px;
+        font-size: 18px;
+        margin: 0;
+    }
+    #select-div {
+        position: fixed;
+        left: 2%;
+        display: flex;
+        max-width: 100vw;
+        justify-content: space-around;
+        top: 0.3%;
+        z-index: 100;
+
+    }
+
+    canvas{
+        border: none;
+        opacity: 0.8;
+        margin-top: 15%;
+    }
+    #showcase-coin{
+        left: 30%;
+    }
+    body{
+        align-items: center;
+    }
+
+    #coin-div{
+        scale: 0.9;
+        background-image: linear-gradient(23deg, rgb(51, 51, 51), rgba(168, 0, 255, 0.16));
+        flex-direction: column;
+        gap: 3px;
+        margin: 0;
+    }
+    #list{
+        margin: 0;
+        gap: 0;
+    }
+
+
+
+}
+
 

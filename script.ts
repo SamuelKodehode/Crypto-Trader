@@ -9,6 +9,9 @@ const timeDiv = document.getElementById('time-div') as HTMLDivElement
 const selectTime = document.getElementById('time-frame') as HTMLSelectElement
 const sorting = document.getElementById('sort') as HTMLSelectElement
 const listDiv = document.getElementById('list') as HTMLDivElement
+const portBtn = document.getElementById('portBtn') as HTMLButtonElement
+const userAssets = document.getElementById('user-assets') as HTMLDivElement
+let userAssetsShow = false
 
 let user: User = {
 	name: 'Samuel',
@@ -304,7 +307,11 @@ const drawchart = (array: any) => {
 	}
 
 	canvas.width = window.innerWidth * 0.7
-	canvas.height = window.innerHeight * 0.7
+	canvas.height = window.innerWidth * 0.3
+
+	window.addEventListener('resize', () => {
+		getChart(chartArray, selectChart.value, selectTime.value)
+	})
 
 	context.setTransform(1, 0, 0, 1, 0, 0) // set to indentity
 	context.clearRect(0, 0, canvas.width, canvas.height) // clear
@@ -355,6 +362,8 @@ const drawchart = (array: any) => {
 		showPrice.style.bottom = `${(100 / 20) * i}%`
 		showPrice.style.left = `-9%`
 
+		showPrice.id = 'prices'
+
 		priceDiv.append(showPrice)
 	}
 
@@ -363,6 +372,7 @@ const drawchart = (array: any) => {
 
 		if (index < data.length) {
 			const time = document.createElement('h2') as HTMLHeadingElement
+			time.id = 'time'
 
 			// Assuming data.time contains Unix timestamps, you can convert them to Date objects
 			const dateObject = new Date(data[index].time)
@@ -444,6 +454,7 @@ async function updateUser() {
 				sellInput.placeholder = ' coin amount'
 				sellBtn.textContent = 'sell'
 
+
 				sellBtn.addEventListener('click', () => {
 					if (sellInput.valueAsNumber > 0 && sellInput.valueAsNumber * coinMarketValue <= user.money) {
 						coin.amount -= sellInput.valueAsNumber
@@ -480,6 +491,13 @@ async function fetchMarketData() {
 		return []
 	}
 }
+
+userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visibility =  'hidden'
+portBtn.addEventListener('click', () => {
+	userAssetsShow = !userAssetsShow
+	userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visibility =  'hidden'
+	userAssetsShow ? portBtn.style.backgroundImage = 'linear-gradient(-45deg, rgb(243, 0, 255), rgb(0, 167, 255))'  : portBtn.style.backgroundImage =  'linear-gradient(23deg, rgb(243, 0, 255), rgb(0, 167, 255))'
+})
 
 getData(assetsUrl).then()
 getChart(chartArray, 'bitcoin', 'm5').then()

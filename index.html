@@ -10,6 +10,24 @@
     <meta name="keywords" content="HTML, CSS, Typescript">
 </head>
 <body>
+<div id="select-div">
+    <button id="portBtn">Show Portfolio</button>
+    <label for="currency"></label>
+    <select  name="currency" id="currency"></select>
+
+    <label for="time-frame"></label>
+    <select name="timeFrame" id="time-frame">
+        <option value="m5">24h</option>
+        <option value="m1">1h</option>
+        <option value="m15">3days</option>
+        <option value="m30">7days</option>
+        <option value="h1">2weeks</option>
+        <option value="h2">4weeks</option>
+        <option value="h6">6months</option>
+        <option value="h12">1year</option>
+    </select>
+</div>
+
 <div id="chart">
     <div id="showcase-coin">
         <h1 id="show-name"></h1>
@@ -27,22 +45,7 @@
 
     </div>
 
-    <div id="select-div">
-        <label for="currency"></label>
-        <select  name="currency" id="currency"></select>
 
-        <label for="time-frame"></label>
-        <select name="timeFrame" id="time-frame">
-            <option value="m5">24h</option>
-            <option value="m1">1h</option>
-            <option value="m15">3days</option>
-            <option value="m30">7days</option>
-            <option value="h1">2weeks</option>
-            <option value="h2">4weeks</option>
-            <option value="h6">6months</option>
-            <option value="h12">1year</option>
-        </select>
-    </div>
     <div id="canvas-div">
         <canvas id="canvas"></canvas>
     </div>
@@ -61,7 +64,9 @@
         <option value="24L">worst24h</option>
     </select>
 </div>
-<div id="list"></div>
+<div id="list">
+
+</div>
 
 
 <script type="module" src="script.js"></script>
