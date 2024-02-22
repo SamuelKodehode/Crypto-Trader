@@ -226,6 +226,7 @@ input:hover, button:hover {
     }
     #showcase-coin{
         left: 30%;
+        z-index: 1;
     }
     body{
         align-items: center;
