@@ -497,7 +497,7 @@ userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visi
 portBtn.addEventListener('click', () => {
 	userAssetsShow = !userAssetsShow
 	userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visibility =  'hidden'
-	userAssetsShow ? portBtn.style.backgroundImage = 'linear-gradient(-45deg, rgb(243, 0, 255), rgb(0, 167, 255))'  : portBtn.style.backgroundImage =  'linear-gradient(23deg, rgb(243, 0, 255), rgb(0, 167, 255))'
+
 })
 
 getData(assetsUrl).then()
