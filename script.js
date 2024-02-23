@@ -309,7 +309,7 @@ const drawchart = (array) => {
     context.lineTo(startPoint, canvas.height);
     context.lineTo(startPoint, startValue);
     const grd = context.createLinearGradient(0, 0, canvas.width / 2, 0);
-    grd.addColorStop(0, 'rgb(191,0,255)');
+    grd.addColorStop(0, 'rgba(191,0,255,0.7)');
     grd.addColorStop(1, 'rgba(0,182,255,0.65)');
     context.fillStyle = grd;
     context.fill();
@@ -392,10 +392,11 @@ async function updateUser() {
                 sellInput.placeholder = ' coin amount';
                 sellBtn.textContent = 'sell';
                 sellBtn.addEventListener('click', () => {
-                    if (sellInput.valueAsNumber > 0 && sellInput.valueAsNumber * coinMarketValue <= user.money) {
+                    if (sellInput.valueAsNumber > -0 && sellInput.valueAsNumber <= coin.amount) {
                         coin.amount -= sellInput.valueAsNumber;
                         user.money += sellInput.valueAsNumber * coinMarketValue;
                         updateUser();
+                        localStorage.setItem('user', JSON.stringify(user));
                         sellInput.textContent = '';
                     }
                 });
