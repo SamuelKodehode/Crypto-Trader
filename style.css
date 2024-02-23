@@ -61,7 +61,8 @@ body {
 }
 
 #time-frame, #currency, #sort, #portBtn {
-    background-color: #3c3c3c;
+    background-color: #727272;
+    background-image: linear-gradient(45deg, #2f2f2f, #727272);
     color: white;
     font-weight: bolder;
     font-size: 15px;
@@ -72,8 +73,8 @@ body {
 
 #time-frame:active, #currency:active, #sort:active, #portBtn:active{
     transition: 0.3s;
-
-    background-color: #5a5a5a;
+    background-color: #727272;
+    background-image: linear-gradient(45deg, #2f2f2f, #727272);
 }
 
 #time-div {
@@ -236,7 +237,7 @@ input:hover, button:hover {
 
     #coin-div{
         scale: 0.9;
-        background-image: linear-gradient(23deg, rgb(51, 51, 51), rgba(168, 0, 255, 0.16));
+        background-image: linear-gradient(23deg, rgb(33, 33, 33), rgba(132, 132, 132, 0.24));
         flex-direction: column;
         gap: 3px;
         margin: 0;
