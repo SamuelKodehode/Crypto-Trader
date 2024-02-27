@@ -211,6 +211,7 @@ input:hover, button:hover {
         font-size: 18px;
         margin: 0;
     }
+
     #select-div {
         position: fixed;
         left: 2%;
@@ -246,9 +247,6 @@ input:hover, button:hover {
         margin: 0;
         gap: 0;
     }
-
-
-
 }
 
 

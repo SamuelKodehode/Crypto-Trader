@@ -1,6 +1,7 @@
 import { cleanPrice } from './cleanPrice.js'
 import { getRandomColor } from './randomColor.js'
-import { User } from './user.js'
+import { User } from './user'
+
 
 const selectChart = document.getElementById('currency') as HTMLSelectElement
 const canvasDiv = document.getElementById('canvas-div') as HTMLDivElement
@@ -158,7 +159,6 @@ async function getData(url: string) {
 async function getChart(targetArray: any, id: string, time: string) {
 	targetArray = ''
 
-
 	const priceChartChange = `https://api.coincap.io/v2/assets/${id}/history?interval=${time}`
 	try {
 		const result: Response = await fetch(priceChartChange, { method: 'GET', headers: chartHeaders })
@@ -174,7 +174,7 @@ async function getChart(targetArray: any, id: string, time: string) {
 		if (time === 'h6') targetArray.data = targetArray.data.slice(-728)
 		if (time === 'h12') targetArray.data = targetArray.data.slice(-728)
 
-		drawchart(targetArray)
+		drawChart(targetArray)
 	} catch (error) {
 		console.log(error)
 	}
@@ -253,11 +253,12 @@ function renderList(data: any) {
 		coinDiv.append(nameDiv, priceDiv, inputBuyAmountDollar, buyButton)
 		listDiv.append(coinDiv)
 
-		buyButton.addEventListener('click', () => {
-			buy(inputBuyAmountDollar.valueAsNumber, parseFloat(coin.priceUsd), coin.id)
+		buyButton.addEventListener('click', async () => {
+			await buy(inputBuyAmountDollar.valueAsNumber, parseFloat(coin.priceUsd), coin.id)
 			inputBuyAmountDollar.value = ''
 			localStorage.setItem('user', JSON.stringify(user))
 		})
+
 		if (coin.id === selectChart.value) {
 			const showName = document.getElementById('show-name') as HTMLHeadingElement
 			const showLogo = document.getElementById('show-logo') as HTMLHeadingElement
@@ -288,11 +289,11 @@ function renderList(data: any) {
 	})
 }
 
-selectChart.addEventListener('input', () => {
-	getData(assetsUrl).then()
+selectChart.addEventListener('input', async () => {
+	await getData(assetsUrl)
 })
 
-const drawchart = (array: any) => {
+const drawChart = (array: any) => {
 	canvasDiv.innerHTML = ''
 	priceDiv.innerHTML = ''
 	timeDiv.innerHTML = ''
@@ -309,11 +310,11 @@ const drawchart = (array: any) => {
 	canvas.width = window.innerWidth * 0.7
 	canvas.height = window.innerWidth * 0.3
 
-	window.addEventListener('resize', () => {
-		getChart(chartArray, selectChart.value, selectTime.value)
+	window.addEventListener('resize', async () => {
+		 await getChart(chartArray, selectChart.value, selectTime.value)
 	})
 
-	context.setTransform(1, 0, 0, 1, 0, 0) // set to indentity
+	context.setTransform(1, 0, 0, 1, 0, 0) // set to identity
 	context.clearRect(0, 0, canvas.width, canvas.height) // clear
 	context.clearRect(0, 0, innerWidth, innerHeight)
 
@@ -392,20 +393,20 @@ const drawchart = (array: any) => {
 		}
 	}
 
-	selectChart.addEventListener('change', () => {
-		getChart(chartArray, selectChart.value, selectTime.value).then()
+	selectChart.addEventListener('change', async () => {
+		await getChart(chartArray, selectChart.value, selectTime.value)
 	})
 
-	selectTime.addEventListener('change', () => {
-		getChart(chartArray, selectChart.value, selectTime.value).then()
+	selectTime.addEventListener('change', async () => {
+		await getChart(chartArray, selectChart.value, selectTime.value)
 	})
 	canvasDiv.append(canvas)
 }
 sorting.addEventListener('change', async () => {
-	await getData(assetsUrl).then()
+	await getData(assetsUrl)
 })
 
-function buy(amount: number, coinRate: number, coinId: string) {
+async function buy(amount: number, coinRate: number, coinId: string) {
 	const coinToUpdate = user.coins.find((coin) => coin.id === coinId)
 
 	if (coinToUpdate) {
@@ -420,7 +421,7 @@ function buy(amount: number, coinRate: number, coinId: string) {
 	} else {
 		console.log(`Coin with ID ${coinId} not found in user's coins`)
 	}
-	updateUser()
+	await updateUser()
 }
 
 
@@ -500,6 +501,6 @@ portBtn.addEventListener('click', () => {
 
 })
 
-getData(assetsUrl).then()
-getChart(chartArray, 'bitcoin', 'm5').then()
-updateUser().then()
+await getData(assetsUrl)
+await getChart(chartArray, 'bitcoin', 'm5')
+await updateUser()

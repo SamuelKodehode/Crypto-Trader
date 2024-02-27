@@ -168,7 +168,7 @@ async function getChart(targetArray, id, time) {
             targetArray.data = targetArray.data.slice(-728);
         if (time === 'h12')
             targetArray.data = targetArray.data.slice(-728);
-        drawchart(targetArray);
+        drawChart(targetArray);
     }
     catch (error) {
         console.log(error);
@@ -235,8 +235,8 @@ function renderList(data) {
         priceDiv.append(priceUsd, priceChange);
         coinDiv.append(nameDiv, priceDiv, inputBuyAmountDollar, buyButton);
         listDiv.append(coinDiv);
-        buyButton.addEventListener('click', () => {
-            buy(inputBuyAmountDollar.valueAsNumber, parseFloat(coin.priceUsd), coin.id);
+        buyButton.addEventListener('click', async () => {
+            await buy(inputBuyAmountDollar.valueAsNumber, parseFloat(coin.priceUsd), coin.id);
             inputBuyAmountDollar.value = '';
             localStorage.setItem('user', JSON.stringify(user));
         });
@@ -267,10 +267,10 @@ function renderList(data) {
         }
     });
 }
-selectChart.addEventListener('input', () => {
-    getData(assetsUrl).then();
+selectChart.addEventListener('input', async () => {
+    await getData(assetsUrl);
 });
-const drawchart = (array) => {
+const drawChart = (array) => {
     canvasDiv.innerHTML = '';
     priceDiv.innerHTML = '';
     timeDiv.innerHTML = '';
@@ -283,8 +283,8 @@ const drawchart = (array) => {
     }
     canvas.width = window.innerWidth * 0.7;
     canvas.height = window.innerWidth * 0.3;
-    window.addEventListener('resize', () => {
-        getChart(chartArray, selectChart.value, selectTime.value);
+    window.addEventListener('resize', async () => {
+        await getChart(chartArray, selectChart.value, selectTime.value);
     });
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -343,18 +343,18 @@ const drawchart = (array) => {
             time.style.color = 'gray';
         }
     }
-    selectChart.addEventListener('change', () => {
-        getChart(chartArray, selectChart.value, selectTime.value).then();
+    selectChart.addEventListener('change', async () => {
+        await getChart(chartArray, selectChart.value, selectTime.value);
     });
-    selectTime.addEventListener('change', () => {
-        getChart(chartArray, selectChart.value, selectTime.value).then();
+    selectTime.addEventListener('change', async () => {
+        await getChart(chartArray, selectChart.value, selectTime.value);
     });
     canvasDiv.append(canvas);
 };
 sorting.addEventListener('change', async () => {
-    await getData(assetsUrl).then();
+    await getData(assetsUrl);
 });
-function buy(amount, coinRate, coinId) {
+async function buy(amount, coinRate, coinId) {
     const coinToUpdate = user.coins.find((coin) => coin.id === coinId);
     if (coinToUpdate) {
         if (amount <= user.money) {
@@ -369,7 +369,7 @@ function buy(amount, coinRate, coinId) {
     else {
         console.log(`Coin with ID ${coinId} not found in user's coins`);
     }
-    updateUser();
+    await updateUser();
 }
 async function updateUser() {
     userName.textContent = 'Name: ' + user.name;
@@ -427,7 +427,7 @@ portBtn.addEventListener('click', () => {
     userAssetsShow = !userAssetsShow;
     userAssetsShow ? userAssets.style.visibility = 'visible' : userAssets.style.visibility = 'hidden';
 });
-getData(assetsUrl).then();
-getChart(chartArray, 'bitcoin', 'm5').then();
-updateUser().then();
+await getData(assetsUrl);
+await getChart(chartArray, 'bitcoin', 'm5');
+await updateUser();
 //# sourceMappingURL=script.js.map
