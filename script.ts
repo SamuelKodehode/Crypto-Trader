@@ -1,6 +1,6 @@
 import { cleanPrice } from './cleanPrice.js'
 import { getRandomColor } from './randomColor.js'
-import { User } from './user'
+import { User } from './user.js'
 
 
 const selectChart = document.getElementById('currency') as HTMLSelectElement
@@ -122,9 +122,11 @@ let user: User = {
 }
 
 const userIs: string | null = localStorage.getItem('user')
+
 if (userIs) {
 	user = JSON.parse(userIs)
 }
+
 localStorage.setItem('user', JSON.stringify(user))
 
 const userName = document.getElementById('user-name') as HTMLHeadingElement
@@ -174,7 +176,7 @@ async function getChart(targetArray: any, id: string, time: string) {
 		if (time === 'h6') targetArray.data = targetArray.data.slice(-728)
 		if (time === 'h12') targetArray.data = targetArray.data.slice(-728)
 
-		drawChart(targetArray)
+		await drawChart(targetArray)
 	} catch (error) {
 		console.log(error)
 	}
@@ -293,7 +295,7 @@ selectChart.addEventListener('input', async () => {
 	await getData(assetsUrl)
 })
 
-const drawChart = (array: any) => {
+const drawChart = async (array: any) => {
 	canvasDiv.innerHTML = ''
 	priceDiv.innerHTML = ''
 	timeDiv.innerHTML = ''
@@ -311,7 +313,7 @@ const drawChart = (array: any) => {
 	canvas.height = window.innerWidth * 0.3
 
 	window.addEventListener('resize', async () => {
-		 await getChart(chartArray, selectChart.value, selectTime.value)
+		await getChart(chartArray, selectChart.value, selectTime.value)
 	})
 
 	context.setTransform(1, 0, 0, 1, 0, 0) // set to identity
@@ -393,18 +395,30 @@ const drawChart = (array: any) => {
 		}
 	}
 
-	selectChart.addEventListener('change', async () => {
-		await getChart(chartArray, selectChart.value, selectTime.value)
-	})
-
-	selectTime.addEventListener('change', async () => {
-		await getChart(chartArray, selectChart.value, selectTime.value)
-	})
 	canvasDiv.append(canvas)
 }
-sorting.addEventListener('change', async () => {
-	await getData(assetsUrl)
-})
+
+async function handleChartChange() {
+	await getChart(chartArray, selectChart.value, selectTime.value);
+}
+
+async function handleTimeChange() {
+	await getChart(chartArray, selectChart.value, selectTime.value);
+}
+
+async function handleSortingChange() {
+	await getData(assetsUrl);
+}
+
+selectChart.addEventListener('input', async () => {
+	await getData(assetsUrl);
+});
+
+selectChart.addEventListener('change', handleChartChange);
+
+selectTime.addEventListener('change', handleTimeChange);
+
+sorting.addEventListener('change', handleSortingChange);
 
 async function buy(amount: number, coinRate: number, coinId: string) {
 	const coinToUpdate = user.coins.find((coin) => coin.id === coinId)
@@ -456,11 +470,11 @@ async function updateUser() {
 				sellBtn.textContent = 'sell'
 
 
-				sellBtn.addEventListener('click', () => {
+				sellBtn.addEventListener('click', async () => {
 					if (sellInput.valueAsNumber > -0 && sellInput.valueAsNumber  <= coin.amount) {
 						coin.amount -= sellInput.valueAsNumber
 						user.money += sellInput.valueAsNumber * coinMarketValue
-						updateUser()
+						await updateUser()
 						localStorage.setItem('user', JSON.stringify(user))
 						sellInput.textContent = ''
 					}

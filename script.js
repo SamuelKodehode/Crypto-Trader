@@ -168,7 +168,7 @@ async function getChart(targetArray, id, time) {
             targetArray.data = targetArray.data.slice(-728);
         if (time === 'h12')
             targetArray.data = targetArray.data.slice(-728);
-        drawChart(targetArray);
+        await drawChart(targetArray);
     }
     catch (error) {
         console.log(error);
@@ -270,7 +270,7 @@ function renderList(data) {
 selectChart.addEventListener('input', async () => {
     await getData(assetsUrl);
 });
-const drawChart = (array) => {
+const drawChart = async (array) => {
     canvasDiv.innerHTML = '';
     priceDiv.innerHTML = '';
     timeDiv.innerHTML = '';
@@ -343,17 +343,23 @@ const drawChart = (array) => {
             time.style.color = 'gray';
         }
     }
-    selectChart.addEventListener('change', async () => {
-        await getChart(chartArray, selectChart.value, selectTime.value);
-    });
-    selectTime.addEventListener('change', async () => {
-        await getChart(chartArray, selectChart.value, selectTime.value);
-    });
     canvasDiv.append(canvas);
 };
-sorting.addEventListener('change', async () => {
+async function handleChartChange() {
+    await getChart(chartArray, selectChart.value, selectTime.value);
+}
+async function handleTimeChange() {
+    await getChart(chartArray, selectChart.value, selectTime.value);
+}
+async function handleSortingChange() {
+    await getData(assetsUrl);
+}
+selectChart.addEventListener('input', async () => {
     await getData(assetsUrl);
 });
+selectChart.addEventListener('change', handleChartChange);
+selectTime.addEventListener('change', handleTimeChange);
+sorting.addEventListener('change', handleSortingChange);
 async function buy(amount, coinRate, coinId) {
     const coinToUpdate = user.coins.find((coin) => coin.id === coinId);
     if (coinToUpdate) {
@@ -391,11 +397,11 @@ async function updateUser() {
                 sellInput.type = 'number';
                 sellInput.placeholder = ' coin amount';
                 sellBtn.textContent = 'sell';
-                sellBtn.addEventListener('click', () => {
+                sellBtn.addEventListener('click', async () => {
                     if (sellInput.valueAsNumber > -0 && sellInput.valueAsNumber <= coin.amount) {
                         coin.amount -= sellInput.valueAsNumber;
                         user.money += sellInput.valueAsNumber * coinMarketValue;
-                        updateUser();
+                        await updateUser();
                         localStorage.setItem('user', JSON.stringify(user));
                         sellInput.textContent = '';
                     }
